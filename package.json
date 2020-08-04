@@ -23,6 +23,7 @@
   },
   "dependencies": {
     "@babel/polyfill": "^7.4.3",
+    "css-color-names": "^1.0.1",
     "d3": "^5.16.0",
     "d3-dsv": "^1.2.0",
     "random": "^2.2.0"
