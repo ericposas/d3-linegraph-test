@@ -17,6 +17,8 @@ const doIt = () => {
 
 	const createData = (n) => (new Array(n).fill(1).map((elt, idx) => ([random.int(1, 100), random.int(1, 100), idx])).sort((a, b) => b[0] - a[0]))
 
+	let dataLen = 0
+
 	let scaleX = d3.scaleLinear()
 	.domain([0, 100])
 	.range([margin, w - margin])
@@ -56,89 +58,37 @@ const doIt = () => {
 	}
 
 	const start = () => {
-		let data = createData(20)
+		let data = createData(random.int(10, 100))
 
 		let circles = circle_group
 		.selectAll('circle')
 		.data(data)
 
-		circles.enter()
-		.append('circle')
-		.transition().duration(tDuration)
-		.attr('cx', d => scaleX(d[0]))
-		.attr('cy', d => scaleY(d[1]))
-		.attr('r', 3)
-		.attr('fill', 'red')
+		if (data.length > dataLen) {
+			circles.enter()
+			.append('circle')
+			.merge(circles)
+			.transition().duration(tDuration)
+			.attr('cx', d => scaleX(d[0]))
+			.attr('cy', d => scaleY(d[1]))
+			.attr('r', 3)
+			.attr('fill', 'red')
+		} else {
+			circles.exit()
+			.remove()
+			.merge(circles)
+			.transition().duration(tDuration)
+			.attr('cx', d => scaleX(d[0]))
+			.attr('cy', d => scaleY(d[1]))
+			.attr('r', 3)
+			.attr('fill', 'red')
+		}
+
+		dataLen = data.length
 
 		drawPath(data)
 
-		setTimeout(delayed, delay)
-	}
-
-	const restart = () => {
-		let data = createData(35)
-
-		let circles = circle_group
-		.selectAll('circle')
-		.data(data)
-
-		circles.exit().remove()
-
-		circles
-		.data(data)
-		.merge(circles)
-		.transition().duration(tDuration)
-		.attr('cx', d => scaleX(d[0]))
-		.attr('cy', d => scaleY(d[1]))
-		.attr('r', 3)
-		.attr('fill', 'red')
-
-		drawPath(data)
-
-		setTimeout(delayed, delay)
-	}
-
-	const delayed = () => {
-		let data = createData(random.int(10, 20))
-
-		let circles = circle_group
-		.selectAll('circle')
-		.data(data)
-
-		circles
-		.exit().remove()
-
-		circles
-		.data(data)
-		.merge(circles)
-		.transition().duration(tDuration)
-		.attr('fill', 'lightblue')
-		.attr('cx', d => scaleX(d[0]))
-		.attr('cy', d => scaleY(d[1]))
-
-		drawPath(data)
-
-		setTimeout(delayed2, delay)
-	}
-
-	const delayed2 = () => {
-		let data = createData(50)
-
-		let circles = circle_group
-		.selectAll('circle')
-		.data(data)
-
-		circles.enter().append('circle')
-		.merge(circles)
-		.transition().duration(tDuration)
-		.attr('r', 3)
-		.attr('fill', 'lightgreen')
-		.attr('cx', d => scaleX(d[0]))
-		.attr('cy', d => scaleY(d[1]))
-
-		drawPath(data)
-
-		setTimeout(restart, delay)
+		setTimeout(start, delay)
 	}
 
 	start()
