@@ -7,8 +7,9 @@ const doIt = () => {
 
 	let w = 700
 	let h = 500
-	let margin = 20
-	let tDuration = 1500
+	let margin = 10
+	let tDuration = 1000
+	let delay = 4500
 
 	let svg = d3.select('#svg')
 	.attr('width', w).attr('height', h)
@@ -31,9 +32,7 @@ const doIt = () => {
 	.y(d => scaleY(d[1]))
 
 	const drawPath = data => {
-		if (svg.selectAll('path')) {
-			svg.selectAll('path').remove()
-		}
+		if (svg.selectAll('path')) svg.selectAll('path').remove()
 
 		let path = svg.selectAll('path')
 		.data([data], d => d)
@@ -50,14 +49,13 @@ const doIt = () => {
 			path
 			.attr('stroke-dasharray', totalLength + ' ' + totalLength)
 			.attr('stroke-dashoffset', -totalLength)
-			.transition().duration(tDuration)
+			.transition().delay(tDuration).duration(tDuration)
 			.ease(d3.easeLinear)
 			.attr('stroke-dashoffset', 0)
 		}
 	}
 
 	const start = () => {
-		// console.log(createData(10))
 		let data = createData(20)
 
 		let circles = circle_group
@@ -74,9 +72,7 @@ const doIt = () => {
 
 		drawPath(data)
 
-		setTimeout(() => {
-			delayed()
-		}, 3000)
+		setTimeout(delayed, delay)
 	}
 
 	const restart = () => {
@@ -99,9 +95,7 @@ const doIt = () => {
 
 		drawPath(data)
 
-		setTimeout(() => {
-			delayed()
-		}, 3000)
+		setTimeout(delayed, delay)
 	}
 
 	const delayed = () => {
@@ -124,7 +118,7 @@ const doIt = () => {
 
 		drawPath(data)
 
-		setTimeout(delayed2, 3000)
+		setTimeout(delayed2, delay)
 	}
 
 	const delayed2 = () => {
@@ -144,7 +138,7 @@ const doIt = () => {
 
 		drawPath(data)
 
-		setTimeout(restart, 3000)
+		setTimeout(restart, delay)
 	}
 
 	start()
