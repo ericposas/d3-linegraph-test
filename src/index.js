@@ -19,10 +19,10 @@ const doIt = () => {
 	.attr('width', w).attr('height', h)
 	.style('border', '1px solid black')
 	.style('background', 'black')
-	
+
 	const createData = (n) => (new Array(n).fill(1).map((elt, idx) => ([random.int(1, 100), random.int(1, 100), idx])).sort((a, b) => b[0] - a[0]))
 
-	const getRandColor = () => Object.entries(colors.default)[random.int(0, 148)][0]
+	const getRandColor = () => Object.entries(colors.default)[random.int(0, Object.entries(colors.default).length - 1)][0]
 
 	let dataLen = 0
 
